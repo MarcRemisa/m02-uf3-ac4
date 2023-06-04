@@ -52,26 +52,35 @@ def initBD():
     return
 
 # checkUser: comprueba si el par usuario-contraseña existe en la BD
-def checkUser(user,password):
-    bd=connectBD()
-    cursor=bd.cursor()
+def checkUser(user, password):
+    bd = connectBD()
+    cursor = bd.cursor()
 
-    query=f"SELECT user,name,surname1,surname2,age,genre FROM users WHERE user='{user}'\
-            AND password='{password}'"
-    print(query)
-    cursor.execute(query)
+    query = "SELECT user, name, surname1, surname2, age, genre FROM users WHERE user = %s AND password = %s"
+    values = (user, password)
+
+    cursor.execute(query, values)
     userData = cursor.fetchall()
     bd.close()
-    
+
     if userData == []:
         return False
     else:
         return userData[0]
 
-# cresteUser: crea un nuevo usuario en la BD
-def createUser(user,password,name,surname1,surname2,age,genre):
-    
-    return
+
+# createUser: crea un nuevo usuario en la BD
+def createUser(user, password, name, surname1, surname2, age, genre):
+    bd = connectBD()
+    cursor = bd.cursor()
+
+    query = "INSERT INTO users (user, password, name, surname1, surname2, age, genre) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    values = (user, password, name, surname1, surname2, age, genre)
+
+    cursor.execute(query, values)
+    bd.commit()
+    bd.close()
+
 
 # Secuencia principal: configuración de la aplicación web ##########################################
 # Instanciación de la aplicación web Flask
@@ -112,15 +121,15 @@ def new_user():
         password=formData['contrasena']
         name=formData["nombre"]
         surname1=formData["apellido1"]
-        surname2=formData["apellido1"]
+        surname2=formData["apellido2"]
         age=formData["edad"]
         genre=formData["genero"]
         UserCreated = createUser(user,password,name,surname1,surname2,age,genre)
         
         if UserCreated == False:
-            return render_template("results.html",signin=False)
+            return render_template("home.html",signin=False)
         else:
-            return render_template("results.html",signin=True,UserCreated=UserCreated)
+            return render_template("home.html",signin=True,UserCreated=UserCreated)
 
         
 # Configuración y arranque de la aplicación web
