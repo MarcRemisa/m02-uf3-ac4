@@ -13,9 +13,14 @@
     </header>
     <main>
         <form action="{{url_for('signin')}}" method="POST" class="formulario">
-            <h2>Log in to application</h2>
-            <input type="text" name="usuario" placeholder="login"/>
+            <h2>Signin to application</h2>
+            <input type="text" name="usuario" placeholder="usuario"/>
             <input type="text" name="contrasena" placeholder="contraseña"/>
+            <input type="text" name="nombre" placeholder="nombre"/>
+            <input type="text" name="apellido1" placeholder="apellido1"/>
+            <input type="text" name="apellido2" placeholder="apellido2"/>
+            <input type="text" name="edad" placeholder="edad"/>
+            <input type="text" name="genero" placeholder="genero"/>
             <input type="submit" value="Enviar">
         </form>
     </main>

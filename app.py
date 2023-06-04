@@ -2,7 +2,7 @@
 """
 Created on February 2023
 
-@author: Albert ETPX
+@author: Marc Remisa
 """
 
 # Importación de módulos externos
@@ -16,7 +16,7 @@ def connectBD():
     db = mysql.connector.connect(
         host = "localhost",
         user = "root",
-        passwd = "claumestra",
+        passwd = "marcremisa10",
         database = "users"
     )
     return db
@@ -89,7 +89,7 @@ def login():
 
 @app.route("/signin")
 def signin():
-    return "SIGN IN PAGE"
+    return render_template("signin.html")
 
 @app.route("/results",methods=('GET', 'POST'))
 def results():
@@ -103,6 +103,25 @@ def results():
             return render_template("results.html",login=False)
         else:
             return render_template("results.html",login=True,userData=userData)
+        
+@app.route('/newUser', methods=('GET','POST'))
+def new_user():
+    if request.method == ('POST'):
+        formData = request.form
+        user=formData['usuario']
+        password=formData['contrasena']
+        name=formData["nombre"]
+        surname1=formData["apellido1"]
+        surname2=formData["apellido1"]
+        age=formData["edad"]
+        genre=formData["genero"]
+        UserCreated = createUser(user,password,name,surname1,surname2,age,genre)
+        
+        if UserCreated == False:
+            return render_template("results.html",signin=False)
+        else:
+            return render_template("results.html",signin=True,UserCreated=UserCreated)
+
         
 # Configuración y arranque de la aplicación web
 app.config['TEMPLATES_AUTO_RELOAD'] = True
